@@ -2,31 +2,36 @@ from flask import Flask
 from flask import render_template
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import time    
-app = Flask(__name__) #creates flask app and gives it the name of the file ("app")
+import time  
+from flask_swagger_ui import get_swaggerui_blueprint  
+app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
-@app.route("/")
-def hello():
-    return "Hello World"
 
-@app.route("/product/<int:product_id>")
-def product_page(product_id):
-    return "Welcome to product %d" % product_id
-
-@app.route("/products/<int:productid>")
-def renderthis(productid):
-    return render_template('product-page.html', id=productid)
-
-def GetSoup(searchterm):
-    driver = webdriver.Chrome(executable_path="C:\Program Files (x86)\chromedriver.exe")
-    driver.get("https://www.google.com/search?" + "q=" + searchterm + "&tbm=shop")
-    soup = BeautifulSoup(driver.page_source)
-    driver.close()
-    return soup
 
 @app.route("/getallproducts/<string:searchterm>")
 def getallproducts(searchterm):
     soup = GetSoup(searchterm)
+    sortedlist = GetSortedList(soup)
+
+    return sortedlist
+
+@app.route("/getlowest/<string:searchterm>")
+def getlowestproduct(searchterm):
+    soup = GetSoup(searchterm)
+
+    lowestproduct = GetSortedList(soup)[0]
+
+    return lowestproduct
+
+@app.route("/gethighest/<string:searchterm>")
+def gethighestproduct(searchterm):
+    soup = GetSoup(searchterm)
+
+    highestproduct = GetSortedList(soup)[-1]
+
+    return highestproduct
+
+def GetSortedList(soup):
     list = soup.find_all('div', class_="sh-dgr__content")
 
     productlist = []
@@ -66,9 +71,22 @@ def getallproducts(searchterm):
         tempdict = {"Title":title, "Price":pricebeforeship, "Shipping":shipping, "TotalPrice":TotalFloat, "Seller":seller, "url":url}
         productlist.append(tempdict)
 
-    #quicksort
-    def sort(array):
-        """Sort the array by using quicksort."""
+    sortedproductlist = sort(productlist)
+    for product in sortedproductlist:
+        product["TotalPrice"] = "${:.2f}".format(product["TotalPrice"])
+        
+    return sortedproductlist
+
+
+def GetSoup(searchterm):
+    driver = webdriver.Chrome(executable_path="C:\Program Files (x86)\chromedriver.exe")
+    driver.get("https://www.google.com/search?" + "q=" + searchterm + "&tbm=shop")
+    soup = BeautifulSoup(driver.page_source)
+    driver.close()
+    return soup
+
+def sort(array):
+        """Sorting array by quicksort:"""
         less = []
         equal = []
         greater = []
@@ -85,12 +103,6 @@ def getallproducts(searchterm):
             return sort(less)+equal+sort(greater) 
         else:  
             return array
-
-    sortedproductlist = sort(productlist)
-    for product in sortedproductlist:
-        product["TotalPrice"] = "${:.2f}".format(product["TotalPrice"])
-        
-    return sortedproductlist
 
 
 if __name__ == "__main__": #if this file being run is the one that is being run, then this will evaluate to true since the one being run has __name__ set to __main__
