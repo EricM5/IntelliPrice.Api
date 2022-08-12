@@ -152,4 +152,5 @@ def sort(array):
 
 
 if __name__ == "__main__": #if this file being run is the one that is being run, then this will evaluate to true since the one being run has __name__ set to __main__
-    app.run(port=5000)
+    # app.run(port=5000)
+    app.run(host="0.0.0.0")
