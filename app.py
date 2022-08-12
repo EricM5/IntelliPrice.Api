@@ -62,7 +62,7 @@ def gethighestnum(searchterm, size):
     if (size > len(highestproductlist)):
         size = len(highestproductlist)
     highestproducts = highestproductlist[-size:]
-    return highestproducts
+    return highestproducts, 300
 
 def GetSortedList(soup):
     list = soup.find_all('div', class_="sh-dgr__content")
