@@ -1,1 +1,1 @@
-web: python -b :$PORT app:app
+web: python app.py
