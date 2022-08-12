@@ -1,14 +1,16 @@
 from flask import Flask
 from flask import render_template
 from selenium import webdriver
+from selenium.webdriver import ChromeOptions
 from bs4 import BeautifulSoup
 import time  
 from flask_swagger_ui import get_swaggerui_blueprint  
+import os
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
 
-@app.route("/getallproducts/<string:searchterm>")
+@app.route("/getall/<string:searchterm>")
 def getallproducts(searchterm):
     soup = GetSoup(searchterm)
     sortedlist = GetSortedList(soup)
@@ -30,6 +32,37 @@ def gethighestproduct(searchterm):
     highestproduct = GetSortedList(soup)[-1]
 
     return highestproduct
+
+@app.route("/getlowest/<string:searchterm>/<int:size>")
+def getlowestnum(searchterm, size):
+    
+    if size <= 0:
+        return []
+    
+    soup = GetSoup(searchterm)
+
+    # highestproduct = GetSortedList(soup)[0:size]
+    lowestproductlist = GetSortedList(soup)
+    if (size > len(lowestproductlist)):
+        size = len(lowestproductlist)
+    lowestproducts = lowestproductlist[0:size]
+
+    return lowestproducts
+
+@app.route("/gethighest/<string:searchterm>/<int:size>")
+def gethighestnum(searchterm, size):
+    
+    if size <= 0:
+        return []
+    
+    soup = GetSoup(searchterm)
+
+    # highestproduct = GetSortedList(soup)[-size:]
+    highestproductlist = GetSortedList(soup)
+    if (size > len(highestproductlist)):
+        size = len(highestproductlist)
+    highestproducts = highestproductlist[-size:]
+    return highestproducts
 
 def GetSortedList(soup):
     list = soup.find_all('div', class_="sh-dgr__content")
@@ -79,8 +112,19 @@ def GetSortedList(soup):
 
 
 def GetSoup(searchterm):
-    driver = webdriver.Chrome(executable_path="C:\Program Files (x86)\chromedriver.exe")
+    options = ChromeOptions()
+    options.headless = True
+    driver = webdriver.Chrome(executable_path="C:\Program Files (x86)\chromedriver.exe",)
     driver.get("https://www.google.com/search?" + "q=" + searchterm + "&tbm=shop")
+    
+    # chrome_options = webdriver.ChromeOptions()
+    # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    # chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--disable-dev-shm-usage")
+    # chrome_options.add_argument("--no-sandbox")
+    # driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+
+
     soup = BeautifulSoup(driver.page_source)
     driver.close()
     return soup
