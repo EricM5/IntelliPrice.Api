@@ -3,13 +3,15 @@
   <img src="https://user-images.githubusercontent.com/76453820/184288411-d544fb1e-615f-4812-993c-ee37e67857b6.png">
 </p>
 
-**Show User**
+BaseURL: https://intelli-price.herokuapp.com/
+
+**Get All Products**
 ----
-  Returns json data about a single user.
+  Returns list of products for given search term.
 
 * **URL**
 
-  /users/:id
+  /getall/{searchterm}
 
 * **Method:**
 
@@ -19,7 +21,7 @@
 
    **Required:**
  
-   `id=[integer]`
+   `searchterm=[string]`
 
 * **Data Params**
 
@@ -28,17 +30,13 @@
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `{ id : 12, name : "Michael Bloom" }`
+    **Content:** 
+    `[ {"Title": string,"Price": string,"Shipping":string,"TotalPrice":string,"Seller":string,"url":string} ]`
  
 * **Error Response:**
 
   * **Code:** 404 NOT FOUND <br />
-    **Content:** `{ error : "User doesn't exist" }`
-
-  OR
-
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "You are unauthorized to make this request." }`
+    **Content:** `[]`
 
 * **Sample Call:**
 
