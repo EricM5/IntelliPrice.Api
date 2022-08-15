@@ -7,7 +7,7 @@ BaseURL: https://intelli-price.herokuapp.com/
 
 **Get All Products**
 ----
-  Returns list of products for given search term.
+  Returns 60+ products from Google Shopping for given search term, specified in parameter. Returns list of products in ascending order by total price with shipping cost factored in.
 
 * **URL**
 
@@ -31,22 +31,46 @@ BaseURL: https://intelli-price.herokuapp.com/
 
   * **Code:** 200 <br />
     **Content:** 
-    `[ {"Title": string,"Price": string,"Shipping":string,"TotalPrice":string,"Seller":string,"url":string} ]`
- 
+    ```json
+    [
+      {
+        "Title": "string",
+        "Price": "string",
+        "Shipping": "string",
+        "TotalPrice": "string",
+        "Seller": "string",
+        "url": "https:/producturlfoundhere.com"
+      },
+      {
+        "Title": "string",
+        "Price": "string",
+        "Shipping": "string",
+        "TotalPrice": "string",
+        "Seller": "string",
+        "url": "https:/producturlfoundhere.com"
+      },
+    ]
+    ```
 * **Error Response:**
 
   * **Code:** 404 NOT FOUND <br />
-    **Content:** `[]`
+    **Content:**
+    ```
+    []
+    ```
 
 * **Sample Call:**
 
-  ```javascript
-    $.ajax({
-      url: "/users/1",
-      dataType: "json",
-      type : "GET",
-      success : function(r) {
-        console.log(r);
-      }
-    });
+  ```python
+    import requests
+
+    querysearchterm = "San Jose Sharks Jersey"
+    response = requests.get("https://intelli-price.herokuapp.com/getall/" + querysearchterm)
+
+    print(response)
+
+    listofproducts = response.json()
+
+    lowestpricedproduct = listofproducts[0]
+    highestpricedproduct = listofproducts[-1]
   ```
