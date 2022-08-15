@@ -64,7 +64,7 @@ BaseURL: https://intelli-price.herokuapp.com/
   ```python
     import requests
 
-    querysearchterm = "San Jose Sharks Jersey"
+    querysearchterm = "San+Jose+Sharks+Jersey"
     response = requests.get("https://intelli-price.herokuapp.com/getall/" + querysearchterm)
 
     print(response)
@@ -73,4 +73,65 @@ BaseURL: https://intelli-price.herokuapp.com/
 
     lowestpricedproduct = listofproducts[0]
     highestpricedproduct = listofproducts[-1]
+  ```
+**Get Lowest Priced Product(s)**
+----
+  Returns Lowest priced products. If {num} param is not specified, then request will only return the lowest priced product. If specified, then it will return {num} of the lowest products.
+
+* **URL**
+
+  /getlowest/{searchterm}/{num}
+
+* **Method:**
+
+  `GET`
+  
+*  **URL Params**
+
+   **Required:**
+ 
+   `searchterm=[string]`
+   
+   **Optional:**
+ 
+   `num=[int]`
+
+* **Data Params**
+
+  None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```json
+      {
+        "Title": "string",
+        "Price": "string",
+        "Shipping": "string",
+        "TotalPrice": "string",
+        "Seller": "string",
+        "url": "https:/producturlfoundhere.com"
+      }
+    ```
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:**
+    ```
+    []
+    ```
+
+* **Sample Call:**
+
+  ```python
+    import requests
+
+    querysearchterm = "San+Jose+Sharks+Jersey"
+    number = 5
+    response = requests.get("https://intelli-price.herokuapp.com/getlowest/" + querysearchterm + "/" + number)
+
+    print(response)
+
+    listofproducts = response.json()
   ```
