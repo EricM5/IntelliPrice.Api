@@ -131,7 +131,7 @@
 
     querysearchterm = "office+chair"
     number = 5
-    response = requests.get("https://intelli-price.herokuapp.com/getlowest/" + querysearchterm + "/" + number)
+    response = requests.get("https://intelli-price.herokuapp.com/getlowest/" + querysearchterm + "/" + str(number))
 
     print(response)
 
@@ -192,7 +192,7 @@
 
     querysearchterm = "cool+tshirts"
     number = 5
-    response = requests.get("https://intelli-price.herokuapp.com/getlowest/" + querysearchterm + "/" + number)
+    response = requests.get("https://intelli-price.herokuapp.com/getlowest/" + querysearchterm + "/" + str(number))
 
     print(response)
 
