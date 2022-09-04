@@ -3,9 +3,9 @@
   <img src="https://user-images.githubusercontent.com/76453820/184288411-d544fb1e-615f-4812-993c-ee37e67857b6.png">
 </p>
 
-The first completely free Google Shopping API for 26.8 million worldwide developers.
+<p align="center">The first completely free Google Shopping API for 26.8 million worldwide developers.</p>
 
-BaseURL: https://intelli-price.herokuapp.com/
+<p align="center"><strong>BaseURL: https://intelli-price.herokuapp.com/</strong></p>
 
 **Get All Products**
 ----
